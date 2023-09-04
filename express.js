@@ -1,14 +1,18 @@
 const express = require("express");
 const app = express();
+app.use(express.json());
+
 let users = [
     {name: "Mousa", age:24},
     {name: "khairy", age: 52},
     {name: "Halim", age: 80}
-]
+];
+
 app.get("/", (req, res) => {
     res.json(users)
 });
-app.post("/addUser", express.json(), (req, res) => {
+
+app.post("/addUser", (req, res) => {
     let {name, age} = req.body;
     let nameEx = users.find((ele) => ele.name == name);
     if(nameEx) {
@@ -18,6 +22,7 @@ app.post("/addUser", express.json(), (req, res) => {
         res.json({message: "is added"})
     }
 });
+
 app.delete("/", (req, res) => {
     let {name} = req.body;
     let deletedUser = users.filter((ele) => ele.name != name);
@@ -26,7 +31,8 @@ app.delete("/", (req, res) => {
     }else {
         res.json({message: "Is Deleted"})
     }
-})
+});
+
 app.delete("/:name", (req, res) => {
     let {name} = req.params;
     let deletedUser = users.filter((ele) => ele.name != name);
@@ -35,11 +41,13 @@ app.delete("/:name", (req, res) => {
     }else {
         res.json({message: "Is Deleted"})
     }
-})
+});
+
 app.get("/getusers", (req, res) => {
     const sortedUsers = users.slice().sort((a, b) => a.name.localeCompare(b.name));
     res.status(200).json(sortedUsers);
   });
+
 app.put("/updateuser/:name", (req, res) => {
     const userNameToUpdate = req.params.name;
     const updatedUserData = req.body;
@@ -51,6 +59,7 @@ app.put("/updateuser/:name", (req, res) => {
       res.status(404).json({ error: "User not found" });
     }
 });
+
 app.get("/users/:id", (req, res) => {
     const userId = parseInt(req.params.id);
   
@@ -76,7 +85,7 @@ app.get("/", (req, res) => {
     res.json(posts)
 });
 
-app.post("/addPost", express.json(), (req, res) => {
+app.post("/addPost", (req, res) => {
     let {Publisher, About} = req.body;
     let publisherEx = posts.find((ele) => ele.Publisher == Publisher);
     if(publisherEx) {
